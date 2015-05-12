@@ -24,5 +24,12 @@ application = tornado.web.Application([
 ])
 
 if __name__ == "__main__":
-    application.listen(8888)
+    port = 8888
+    try:
+        from config import port as p
+        port = p
+    except:
+        pass
+        
+    application.listen(port)
     tornado.ioloop.IOLoop.instance().start()
