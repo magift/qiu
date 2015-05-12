@@ -80,6 +80,10 @@ class Option(Data):
     def question(self):
         return self.get('question')
 
+    @property
+    def link(self):
+        return self.get('link')
+
 class Review(Data):
     #title; author; kind; option
     @classmethod

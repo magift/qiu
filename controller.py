@@ -4,7 +4,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 
 mylookup = TemplateLookup(
-	directories=['/root/qiu/templates'], 
+	directories=['./templates'], 
 #	module_directory='/tmp/mako_modules',
 #	collection_size=500, 
 	input_encoding='utf-8',
@@ -33,9 +33,12 @@ class AddQuestionHandler(BaseHandler):
         self.write(render('add_question.html'))
 
     def post(self):
-        title = self.get_argument('title')
+        title = self.get_argument('title').strip()
+        if not title:
+            self.redirect('/question/add')
         question = Question.add(title, self.current_user)
-        self.redirect('/question/%s/' % question.id)
+        #self.redirect('/question/%s/' % question.id)
+        self.redirect('/')
 
 class QuestionHandler(BaseHandler):
     def get(self, id):
@@ -51,12 +54,15 @@ class AddOptionHandler(BaseHandler):
     def post(self, question_id):
         question = Question.take(question_id)
         author = self.current_user
-        title = self.get_argument('title')
-        review = self.get_argument('review')
+        title = self.get_argument('title').strip()
+        review = self.get_argument('review').strip()
+        if not title: 
+            self.redirect('/question/%s/option/add' % question.id)
         option = Option.add(title, author, question)
         if review:
                 review = Review.add(review, author, option)
-        self.redirect('/question/%s/' % question.id)
+        #self.redirect('/question/%s/' % question.id)
+        self.redirect('/')
 
 class AddReviewHandler(BaseHandler):
     def post(self):

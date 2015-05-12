@@ -6,7 +6,14 @@
 
 <%def name="content()">
         %for option in question.options:
-                <h5>${option.title}</h5>
+                <!--a href="http://www.baidu.com/s?wd=${option.title}"><h5>${option.title}</h5></a-->
+                %if option.link:
+                    <a href="${option.link}">
+                    <h5>${option.title} »</h5>
+                    </a>
+                %else:
+                    <h5>${option.title}</h5>
+                %endif
                 %for review in option.reviews:
                     <h5><small>${review.title}</small></h5>
                 %endfor
