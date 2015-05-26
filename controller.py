@@ -64,6 +64,12 @@ class AddOptionHandler(BaseHandler):
         #self.redirect('/question/%s/' % question.id)
         self.redirect('/')
 
+class StaticHandler(BaseHandler):
+    def get(self):
+        questions = Question.get_date_news()
+        options = Option.get_date_news()
+        self.write(render('static.html', questions=questions, options=options))
+
 class AddReviewHandler(BaseHandler):
     def post(self):
         option_id = self.get_argument('oid')

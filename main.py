@@ -20,6 +20,7 @@ application = tornado.web.Application([
     (r"/question/(.*?)/", QuestionHandler),
     (r"/question/(.*?)/option/add", AddOptionHandler),
     (r"/review/add", AddReviewHandler),
+    (r"/static", StaticHandler),
     (r"/", MainHandler),
 ])
 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import leancloud
 
 
@@ -54,6 +54,14 @@ class Question(Data):
     @property
     def new_option(self):
         return self.options and self.options[0] or None
+
+    @classmethod
+    def get_date_news(self):
+        query = Query(Question)
+        query.greater_than("createdAt", datetime.now() - timedelta(days=1))
+        r = query.find()
+
+        return [i for i in r if i not in [j.question for j in Option.get_date_news()]]
     
 class Option(Data):
     #title;author;link;question;
@@ -83,6 +91,20 @@ class Option(Data):
     @property
     def link(self):
         return self.get('link')
+
+    @classmethod
+    def get_date_news(self):
+        query = Query(Option)
+        query.include("question").greater_than('createdAt', datetime.now() - timedelta(days=1)).descending('createdAt')
+        r = query.find()
+        d = dict()
+        for i in r:
+            if i.question in d:
+                continue
+            else:
+                d.update({i.question:i})
+        return d.values()
+        
 
 class Review(Data):
     #title; author; kind; option
